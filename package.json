@@ -78,7 +78,12 @@
     "constructs": "^10.0.5"
   },
   "keywords": [
-    "cdk"
+    "Amazon EventBridge",
+    "aws",
+    "awscdk",
+    "cdk",
+    "events-api",
+    "slack"
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",

@@ -13,6 +13,14 @@ const project = new awscdk.AwsCdkConstructLibrary({
   npmAccess: NpmAccess.PUBLIC,
   description:
     "Exposes a Slack Events API Request URL that validates and sends all received events to an AWS Event Bus",
+  keywords: [
+    "aws",
+    "cdk",
+    "awscdk",
+    "Amazon EventBridge",
+    "slack",
+    "events-api",
+  ],
 
   cdkVersion: MIN_CDK_VERSION,
   defaultReleaseBranch: "main",

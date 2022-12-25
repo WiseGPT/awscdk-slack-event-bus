@@ -43,6 +43,7 @@ new SlackEventBus(scope: Construct, id: string, props: SlackEventBusProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.slackEventsRequestUrl">slackEventsRequestUrl</a></code> | *No description.* |
 
 ---
 
@@ -53,6 +54,18 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `slackEventsRequestUrl` <a name="slackEventsRequestUrl" id="@wisegpt/awscdk-slack-event-bus.SlackEventBus.slackEventsRequestUrl"></a>
+
+```typescript
+public slackEventsRequestUrl(appId?: string): string
+```
+
+###### `appId`<sup>Optional</sup> <a name="appId" id="@wisegpt/awscdk-slack-event-bus.SlackEventBus.slackEventsRequestUrl.parameter.appId"></a>
+
+- *Type:* string
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -86,7 +99,6 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.EventBus</code> | *No description.* |
-| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.slackEventsRequestUrl">slackEventsRequestUrl</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -109,16 +121,6 @@ public readonly eventBus: EventBus;
 ```
 
 - *Type:* aws-cdk-lib.aws_events.EventBus
-
----
-
-##### `slackEventsRequestUrl`<sup>Required</sup> <a name="slackEventsRequestUrl" id="@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.slackEventsRequestUrl"></a>
-
-```typescript
-public readonly slackEventsRequestUrl: string;
-```
-
-- *Type:* string
 
 ---
 

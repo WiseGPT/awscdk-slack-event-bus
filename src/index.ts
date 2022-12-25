@@ -59,8 +59,13 @@ export class SlackEventBus extends Construct {
     });
   }
 
-  get slackEventsRequestUrl(): string {
-    return `${this.httpApi.apiEndpoint}${SlackEventBus.SLACK_EVENTS_PATH}`;
+  slackEventsRequestUrl(appId?: string): string {
+    const path =
+      appId !== undefined
+        ? SlackEventBus.SLACK_EVENTS_PATH.replace("{appId}", appId)
+        : SlackEventBus.SLACK_EVENTS_PATH;
+
+    return `${this.httpApi.apiEndpoint}${path}`;
   }
 
   get eventBus(): Events.EventBus {
