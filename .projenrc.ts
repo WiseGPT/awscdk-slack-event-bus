@@ -1,5 +1,6 @@
 import { awscdk, javascript } from "projen";
 import { LambdaRuntime } from "projen/lib/awscdk";
+import { NpmAccess } from "projen/lib/javascript";
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: "Yiğitcan UÇUM",
@@ -7,6 +8,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
   name: "@wisegpt/awscdk-slack-event-bus",
   packageName: "@wisegpt/awscdk-slack-event-bus",
+  npmAccess: NpmAccess.PUBLIC,
   description:
     "Exposes a Slack Events API Request URL that validates and sends all received events to an AWS Event Bus",
 
