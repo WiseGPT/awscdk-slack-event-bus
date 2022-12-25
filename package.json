@@ -1,12 +1,16 @@
 {
-  "name": "awscdk-slack-event-bus",
+  "name": "@wisegpt/awscdk-slack-event-bus",
+  "description": "Exposes a Slack Events API Request URL that validates and sends all received events to an AWS Event Bus",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yigitcan/awscdk-slack-event-bus.git"
+    "url": "https://github.com/wisegpt/awscdk-slack-event-bus.git"
   },
   "scripts": {
     "build": "npx projen build",
     "bump": "npx projen bump",
+    "bundle": "npx projen bundle",
+    "bundle:lambdas/slack-events.lambda": "npx projen bundle:lambdas/slack-events.lambda",
+    "bundle:lambdas/slack-events.lambda:watch": "npx projen bundle:lambdas/slack-events.lambda:watch",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
@@ -30,16 +34,20 @@
   },
   "author": {
     "name": "Yiğitcan UÇUM",
-    "email": "yigitcan@hotmail.com.tr",
+    "email": "yengas07+wisegpt@gmail.com",
     "organization": false
   },
   "devDependencies": {
+    "@aws-sdk/client-eventbridge": "^3.238.0",
+    "@aws-sdk/client-secrets-manager": "^3.237.0",
+    "@types/aws-lambda": "^8.10.109",
     "@types/jest": "^27",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk-lib": "2.1.0",
+    "aws-cdk-lib": "2.56.0",
     "constructs": "10.0.5",
+    "esbuild": "^0.16.10",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-node": "^0.3.6",
@@ -62,8 +70,12 @@
     "typescript": "^4.9.4"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "^2.1.0",
+    "aws-cdk-lib": "^2.56.0",
     "constructs": "^10.0.5"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.56.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.56.0-alpha.0"
   },
   "keywords": [
     "cdk"

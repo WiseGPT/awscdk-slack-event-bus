@@ -22,3 +22,10 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
+!/assets/
+/lib/internal/**
+.DS_Store
+.prettier*
+*.iml
+.projenrc.ts
+.git*
