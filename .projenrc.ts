@@ -12,7 +12,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   description:
     "Exposes a Slack Events API Request URL that validates and sends all received events to an AWS Event Bus",
 
-  cdkVersion: "2.56.0",
+  cdkVersion: "2.56.1",
   defaultReleaseBranch: "main",
 
   lambdaOptions: {
