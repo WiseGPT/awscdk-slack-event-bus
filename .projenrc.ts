@@ -22,6 +22,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     "events-api",
   ],
 
+  license: "Unlicense",
+
   cdkVersion: MIN_CDK_VERSION,
   defaultReleaseBranch: "main",
 

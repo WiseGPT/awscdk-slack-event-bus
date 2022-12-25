@@ -2,7 +2,7 @@ import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
 import { HttpMethod } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 import { aws_events as Events } from "aws-cdk-lib";
-import { Architecture } from "aws-cdk-lib/aws-lambda";
+import { Alias, Architecture, IFunction } from "aws-cdk-lib/aws-lambda";
 import { ISecret } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { SlackEventsFunction } from "./lambdas/slack-events-function";
@@ -19,18 +19,19 @@ export class SlackEventBus extends Construct {
   private static readonly SLACK_EVENT_BUS_NAME = "slack-event-bus";
 
   private readonly pEventBus: Events.EventBus;
+  private readonly pEventListenerLambdaLiveAlias: Alias;
   private readonly httpApi: apigwv2.HttpApi;
 
   constructor(scope: Construct, id: string, props: SlackEventBusProps) {
     super(scope, id);
 
-    this.pEventBus = new Events.EventBus(this, "SlackEventBus", {
+    this.pEventBus = new Events.EventBus(this, "EventBus", {
       eventBusName: SlackEventBus.SLACK_EVENT_BUS_NAME,
     });
 
-    const slackEventsLambda = new SlackEventsFunction(
+    const eventListenerLambda = new SlackEventsFunction(
       this,
-      "SlackEventsLambda",
+      "EventListenerLambda",
       {
         description: "Slack Events API Request URL Handler",
         architecture: Architecture.ARM_64,
@@ -41,11 +42,20 @@ export class SlackEventBus extends Construct {
       }
     );
 
-    props.tokenSecret.grantRead(slackEventsLambda);
-    this.pEventBus.grantPutEventsTo(slackEventsLambda);
+    this.pEventListenerLambdaLiveAlias = new Alias(
+      this,
+      "EventListenerLambdaLiveAlias",
+      {
+        aliasName: "live",
+        version: eventListenerLambda.currentVersion,
+      }
+    );
+
+    props.tokenSecret.grantRead(this.pEventListenerLambdaLiveAlias);
+    this.pEventBus.grantPutEventsTo(this.pEventListenerLambdaLiveAlias);
 
     this.httpApi = new apigwv2.HttpApi(this, "HttpApi", {
-      description: "Slack Event Bus Http Api",
+      description: "Slack Events Http Api",
     });
 
     this.httpApi.addRoutes({
@@ -53,8 +63,8 @@ export class SlackEventBus extends Construct {
       // ALL methods expect OPTIONS / ANY should be handled by our Lambda
       methods: [HttpMethod.POST],
       integration: new HttpLambdaIntegration(
-        "SlackEventsPostIntegration",
-        slackEventsLambda
+        "EventsPostIntegration",
+        this.pEventListenerLambdaLiveAlias
       ),
     });
   }
@@ -70,5 +80,9 @@ export class SlackEventBus extends Construct {
 
   get eventBus(): Events.EventBus {
     return this.pEventBus;
+  }
+
+  get eventListenerLambdaLiveAlias(): IFunction {
+    return this.pEventListenerLambdaLiveAlias;
   }
 }

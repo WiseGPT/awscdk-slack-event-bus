@@ -99,6 +99,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.EventBus</code> | *No description.* |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventListenerLambdaLiveAlias">eventListenerLambdaLiveAlias</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
 
 ---
 
@@ -121,6 +122,16 @@ public readonly eventBus: EventBus;
 ```
 
 - *Type:* aws-cdk-lib.aws_events.EventBus
+
+---
+
+##### `eventListenerLambdaLiveAlias`<sup>Required</sup> <a name="eventListenerLambdaLiveAlias" id="@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventListenerLambdaLiveAlias"></a>
+
+```typescript
+public readonly eventListenerLambdaLiveAlias: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 ---
 
