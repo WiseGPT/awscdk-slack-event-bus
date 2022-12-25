@@ -2,6 +2,8 @@ import { awscdk, javascript } from "projen";
 import { LambdaRuntime } from "projen/lib/awscdk";
 import { NpmAccess } from "projen/lib/javascript";
 
+const MIN_CDK_VERSION = "2.12.0";
+
 const project = new awscdk.AwsCdkConstructLibrary({
   author: "Yiğitcan UÇUM",
   authorAddress: "yengas07+wisegpt@gmail.com",
@@ -12,7 +14,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   description:
     "Exposes a Slack Events API Request URL that validates and sends all received events to an AWS Event Bus",
 
-  cdkVersion: "2.56.1",
+  cdkVersion: MIN_CDK_VERSION,
   defaultReleaseBranch: "main",
 
   lambdaOptions: {
@@ -30,9 +32,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   projenrcTs: true,
   repositoryUrl: "https://github.com/wisegpt/awscdk-slack-event-bus.git",
 
-  deps: [
-    "@aws-cdk/aws-apigatewayv2-alpha",
-    "@aws-cdk/aws-apigatewayv2-integrations-alpha",
+  peerDeps: [
+    `@aws-cdk/aws-apigatewayv2-alpha@^${MIN_CDK_VERSION}-alpha.0`,
+    `@aws-cdk/aws-apigatewayv2-integrations-alpha@^${MIN_CDK_VERSION}-alpha.0`,
   ],
   devDeps: [
     "@types/aws-lambda",
