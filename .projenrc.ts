@@ -22,6 +22,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     "events-api",
   ],
 
+  workflowNodeVersion: "18.x",
+
   license: "Unlicense",
 
   cdkVersion: MIN_CDK_VERSION,
