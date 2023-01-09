@@ -62,7 +62,7 @@
           "**/projenrc/**",
           ".projenrc.ts",
           "projenrc/**/*.ts",
-          "src/lambdas/slack-events.lambda.ts"
+          "src/lambdas/slack-handler.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true

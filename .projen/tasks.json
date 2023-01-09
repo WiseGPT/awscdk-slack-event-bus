@@ -46,25 +46,25 @@
       "description": "Prepare assets",
       "steps": [
         {
-          "spawn": "bundle:lambdas/slack-events.lambda"
+          "spawn": "bundle:lambdas/slack-handler.lambda"
         }
       ]
     },
-    "bundle:lambdas/slack-events.lambda": {
-      "name": "bundle:lambdas/slack-events.lambda",
-      "description": "Create a JavaScript bundle from src/lambdas/slack-events.lambda.ts",
+    "bundle:lambdas/slack-handler.lambda": {
+      "name": "bundle:lambdas/slack-handler.lambda",
+      "description": "Create a JavaScript bundle from src/lambdas/slack-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/lambdas/slack-events.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/slack-events.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --external:@aws-cdk/*"
+          "exec": "esbuild --bundle src/lambdas/slack-handler.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/slack-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --external:@aws-cdk/*"
         }
       ]
     },
-    "bundle:lambdas/slack-events.lambda:watch": {
-      "name": "bundle:lambdas/slack-events.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/lambdas/slack-events.lambda.ts",
+    "bundle:lambdas/slack-handler.lambda:watch": {
+      "name": "bundle:lambdas/slack-handler.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/lambdas/slack-handler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/lambdas/slack-events.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/slack-events.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --external:@aws-cdk/* --watch"
+          "exec": "esbuild --bundle src/lambdas/slack-handler.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/slack-handler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --external:@aws-cdk/* --watch"
         }
       ]
     },

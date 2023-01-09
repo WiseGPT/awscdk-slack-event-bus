@@ -53,4 +53,4 @@ junit.xml
 tsconfig.json
 !/API.md
 /assets/
-!/src/lambdas/slack-events-function.ts
+!/src/lambdas/slack-handler-function.ts

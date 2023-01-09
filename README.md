@@ -40,13 +40,13 @@ export class MyExampleStack extends Stack {
 
     const appId = "<<your-slack-app-id>>";
     // !IMPORTANT! you should reference `Secret` more securely, e.g. by using `Secret.fromSecretCompleteArn()`
-    const tokenSecret = new Secret(this, "WiseGPTSecrets", {
+    const secret = new Secret(this, "WiseGPTSecrets", {
       secretObjectValue: {
         [`app/${appId}/signing-secret`]: SecretValue.unsafePlainText("<<your-slack-signing-secret>>"),
       },
     });
 
-    const slackEventBus = new SlackEventBus(this, "SlackEventBus", { tokenSecret: tokenSecret });
+    const slackEventBus = new SlackEventBus(this, "SlackEventBus", { secret });
     
     // ... use slackEventBus.eventBus to create rules to listen for events or do something else
 
