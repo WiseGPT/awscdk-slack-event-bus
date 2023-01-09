@@ -5,84 +5,95 @@ import { aws_events as Events } from "aws-cdk-lib";
 import { Alias, Architecture, IFunction } from "aws-cdk-lib/aws-lambda";
 import { ISecret } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
-import { SlackEventsFunction } from "./lambdas/slack-events-function";
+import { SlackHandlerFunction } from "./lambdas/slack-handler-function";
+import { SLACK_PATH_APP_PREFIX, SLACK_PATH_EVENTS_API } from "./path-constants";
 
 export interface SlackEventBusProps {
   /**
-   * `tokenSecret` is a reference to the Secret parameter that stores the
+   * `secret` is a reference to the Secret parameter that stores the signing-secret
+   * and also if oAuth enabled; client id / client secret for each individual appId
    */
-  readonly tokenSecret: ISecret;
+  readonly secret: ISecret;
+
+  /**
+   * `eventBusName` optional name to override the event bus name
+   */
+  readonly eventBusName?: string;
 }
 
 export class SlackEventBus extends Construct {
-  private static readonly SLACK_EVENTS_PATH = "/app/{appId}/slack/events";
   private static readonly SLACK_EVENT_BUS_NAME = "slack-event-bus";
 
+  private static appPath(appId?: string) {
+    return appId !== undefined
+      ? SLACK_PATH_APP_PREFIX.replace("{appId}", appId)
+      : SLACK_PATH_APP_PREFIX;
+  }
+
   private readonly pEventBus: Events.EventBus;
-  private readonly pEventListenerLambdaLiveAlias: Alias;
+  private readonly pSlackHandlerLambdaAlias: Alias;
   private readonly httpApi: apigwv2.HttpApi;
 
   constructor(scope: Construct, id: string, props: SlackEventBusProps) {
     super(scope, id);
 
     this.pEventBus = new Events.EventBus(this, "EventBus", {
-      eventBusName: SlackEventBus.SLACK_EVENT_BUS_NAME,
+      eventBusName: props.eventBusName || SlackEventBus.SLACK_EVENT_BUS_NAME,
     });
 
-    const eventListenerLambda = new SlackEventsFunction(
+    const slackHandlerLambda = new SlackHandlerFunction(
       this,
-      "EventListenerLambda",
+      "SlackHandlerLambda",
       {
-        description: "Slack Events API Request URL Handler",
+        description:
+          "Lambda that handles Slack Events, Interactions, Commands and oAuth",
         architecture: Architecture.ARM_64,
         environment: {
-          SLACK_SECRET_ARN: props.tokenSecret.secretArn,
+          SLACK_SECRET_ARN: props.secret.secretArn,
           SLACK_EVENT_BUS_NAME: this.pEventBus.eventBusName,
         },
       }
     );
 
-    this.pEventListenerLambdaLiveAlias = new Alias(
+    this.pSlackHandlerLambdaAlias = new Alias(
       this,
-      "EventListenerLambdaLiveAlias",
+      "SlackHandlerLambdaLiveAlias",
       {
-        aliasName: "live",
-        version: eventListenerLambda.currentVersion,
+        aliasName: "latest",
+        version: slackHandlerLambda.currentVersion,
       }
     );
 
-    props.tokenSecret.grantRead(this.pEventListenerLambdaLiveAlias);
-    this.pEventBus.grantPutEventsTo(this.pEventListenerLambdaLiveAlias);
+    props.secret.grantRead(this.pSlackHandlerLambdaAlias);
+    this.pEventBus.grantPutEventsTo(this.pSlackHandlerLambdaAlias);
 
     this.httpApi = new apigwv2.HttpApi(this, "HttpApi", {
-      description: "Slack Events Http Api",
+      description: "Slack Handler Http Api",
     });
 
+    // add for handling slack events route
     this.httpApi.addRoutes({
-      path: SlackEventBus.SLACK_EVENTS_PATH,
+      path: `${SLACK_PATH_APP_PREFIX}${SLACK_PATH_EVENTS_API}`,
       // ALL methods expect OPTIONS / ANY should be handled by our Lambda
       methods: [HttpMethod.POST],
       integration: new HttpLambdaIntegration(
         "EventsPostIntegration",
-        this.pEventListenerLambdaLiveAlias
+        this.pSlackHandlerLambdaAlias
       ),
     });
   }
 
   slackEventsRequestUrl(appId?: string): string {
-    const path =
-      appId !== undefined
-        ? SlackEventBus.SLACK_EVENTS_PATH.replace("{appId}", appId)
-        : SlackEventBus.SLACK_EVENTS_PATH;
-
-    return `${this.httpApi.apiEndpoint}${path}`;
+    return `${this.httpApi.apiEndpoint}${SlackEventBus.appPath(
+      appId
+    )}${SLACK_PATH_EVENTS_API}`;
   }
 
   get eventBus(): Events.EventBus {
     return this.pEventBus;
   }
 
-  get eventListenerLambdaLiveAlias(): IFunction {
-    return this.pEventListenerLambdaLiveAlias;
+  get slackHandlerLambdaAlias(): IFunction {
+    return this.pSlackHandlerLambdaAlias;
   }
 }

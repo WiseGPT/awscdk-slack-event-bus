@@ -99,7 +99,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.EventBus</code> | *No description.* |
-| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventListenerLambdaLiveAlias">eventListenerLambdaLiveAlias</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.slackHandlerLambdaAlias">slackHandlerLambdaAlias</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
 
 ---
 
@@ -125,10 +125,10 @@ public readonly eventBus: EventBus;
 
 ---
 
-##### `eventListenerLambdaLiveAlias`<sup>Required</sup> <a name="eventListenerLambdaLiveAlias" id="@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.eventListenerLambdaLiveAlias"></a>
+##### `slackHandlerLambdaAlias`<sup>Required</sup> <a name="slackHandlerLambdaAlias" id="@wisegpt/awscdk-slack-event-bus.SlackEventBus.property.slackHandlerLambdaAlias"></a>
 
 ```typescript
-public readonly eventListenerLambdaLiveAlias: IFunction;
+public readonly slackHandlerLambdaAlias: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
@@ -152,19 +152,34 @@ const slackEventBusProps: SlackEventBusProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.tokenSecret">tokenSecret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | `tokenSecret` is a reference to the Secret parameter that stores the. |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | `secret` is a reference to the Secret parameter that stores the signing-secret and also if oAuth enabled; |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.eventBusName">eventBusName</a></code> | <code>string</code> | `eventBusName` optional name to override the event bus name. |
 
 ---
 
-##### `tokenSecret`<sup>Required</sup> <a name="tokenSecret" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.tokenSecret"></a>
+##### `secret`<sup>Required</sup> <a name="secret" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.secret"></a>
 
 ```typescript
-public readonly tokenSecret: ISecret;
+public readonly secret: ISecret;
 ```
 
 - *Type:* aws-cdk-lib.aws_secretsmanager.ISecret
 
-`tokenSecret` is a reference to the Secret parameter that stores the.
+`secret` is a reference to the Secret parameter that stores the signing-secret and also if oAuth enabled;
+
+client id / client secret for each individual appId
+
+---
+
+##### `eventBusName`<sup>Optional</sup> <a name="eventBusName" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.eventBusName"></a>
+
+```typescript
+public readonly eventBusName: string;
+```
+
+- *Type:* string
+
+`eventBusName` optional name to override the event bus name.
 
 ---
 
