@@ -1,6 +1,6 @@
-import { SlackSecretsService } from "../secrets/slack-secrets.service";
 import { SlackEvent, slackParseEvent } from "./slack-parse-event";
 import { slackVerifySignature } from "./slack-verify-signature";
+import { SlackSecretsService } from "../secrets/slack-secrets.service";
 
 export class SlackService {
   constructor(

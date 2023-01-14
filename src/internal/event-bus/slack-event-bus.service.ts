@@ -1,5 +1,5 @@
-import { SlackEvent } from "../slack/slack-parse-event";
 import { EventBusAdapter } from "./event-bus-adapter";
+import { SlackEvent } from "../slack/slack-parse-event";
 
 function assertSlackEventPayloadUnreachable(payload: never): never {
   throw new Error(
