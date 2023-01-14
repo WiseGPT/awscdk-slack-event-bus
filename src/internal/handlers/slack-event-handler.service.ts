@@ -1,8 +1,8 @@
 import type * as Lambda from "aws-lambda";
+import { HandlerContext } from "./handlers.dto";
 import { SlackEventBusService } from "../event-bus/slack-event-bus.service";
 import { SlackEvent } from "../slack/slack-parse-event";
 import { SlackService } from "../slack/slack.service";
-import { HandlerContext } from "./handlers.dto";
 
 function assertSlackEventPayloadUnreachable(payload: never): never {
   throw new Error(

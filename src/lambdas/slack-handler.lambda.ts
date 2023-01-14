@@ -1,10 +1,10 @@
 import type * as Lambda from "aws-lambda";
+import { BaseLambda, createLambdaHandler } from "./base-lambda";
 import { SlackEventBusService } from "../internal/event-bus/slack-event-bus.service";
 import { HandlerContext } from "../internal/handlers/handlers.dto";
 import { SlackEventHandlerService } from "../internal/handlers/slack-event-handler.service";
 import { SlackService } from "../internal/slack/slack.service";
 import { SLACK_PATH_EVENTS_API } from "../path-constants";
-import { BaseLambda, createLambdaHandler } from "./base-lambda";
 
 const DEFAULT_HEADERS = {
   "content-type": "application/json",
