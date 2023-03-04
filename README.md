@@ -19,12 +19,15 @@ This library was created to fulfill the need of integrating Slack as a Event Sou
 ![AWSCDK-Slack-Event-Bus-Architecture](docs/AWSCDK-Slack-Event-Bus-Architecture.png)
 
 1. Creates an [EventBus](https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-events.EventBus.html) to send all Slack events to
-2. Creates [AWS HTTP API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) for exposing [Slack Events API Request URL](https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls)
-3. Exposes an [AWS Lambda](https://aws.amazon.com/lambda/) via [AWS HTTP API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) to be used as [Slack Events API Request URL](https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls)
+2. Creates or uses an already existing [AWS HTTP API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) for exposing [Slack Events API Request URL](https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls)
+3. Creates an [AWS Lambda](https://aws.amazon.com/lambda/) and adds it to the [AWS HTTP API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api.html) to be used as [Slack Events API Request URL](https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls)
    1. **Lambda** validates the Signature of each received event
    2. **Lambda** responds to `url_verification` which is received when Slack App is configured with the Request URL
    3. **Lambda** sends all received events to the created **EventBus**
+4. Can be used with a single Slack application or with multiple (by default).
 
+## API Reference
+See [API.md](/API.md) for documentation of the `SlackEventBus` construct.
 
 ## Example Usage
 
