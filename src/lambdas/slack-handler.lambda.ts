@@ -26,7 +26,7 @@ export class SlackHandlerLambda extends BaseLambda {
   protected async handle(
     event: Lambda.APIGatewayProxyEventV2
   ): Promise<Lambda.APIGatewayProxyResultV2> {
-    const appId = event.pathParameters?.appId;
+    const appId = event.pathParameters?.appId ?? process.env.SLACK_APP_ID;
     if (appId === undefined) {
       throw new Error(
         "{appId} is undefined, make sure the url includes {appId} path parameter"

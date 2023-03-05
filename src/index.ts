@@ -8,6 +8,20 @@ import { Construct } from "constructs";
 import { SlackHandlerFunction } from "./lambdas/slack-handler-function";
 import { SLACK_PATH_APP_PREFIX, SLACK_PATH_EVENTS_API } from "./path-constants";
 
+const withSlash = (path: string) => (path.startsWith("/") ? path : "/" + path);
+
+export interface SlackEventBusSingleAppProps {
+  /**
+   * `appId` to use for all request validating
+   */
+  readonly appId: string;
+
+  /**
+   * `eventsApiPath` which would be used for the events path
+   */
+  readonly eventsApiPath: string;
+}
+
 export interface SlackEventBusProps {
   /**
    * `secret` is a reference to the Secret parameter that stores the signing-secret
@@ -19,6 +33,17 @@ export interface SlackEventBusProps {
    * `eventBusName` optional name to override the event bus name
    */
   readonly eventBusName?: string;
+
+  /**
+   * `httpApi` optional HTTP API to use, instead of Construct creating a new one
+   */
+  readonly httpApi?: apigwv2.HttpApi;
+
+  /**
+   * `singleApp` optionally configure to use a single application
+   * with fixed app id and path to use
+   */
+  readonly singleApp?: SlackEventBusSingleAppProps;
 }
 
 export class SlackEventBus extends Construct {
@@ -32,13 +57,18 @@ export class SlackEventBus extends Construct {
 
   private readonly pEventBus: Events.EventBus;
   private readonly pSlackHandlerLambdaAlias: Alias;
-  private readonly httpApi: apigwv2.HttpApi;
+  private readonly pHttpApi: apigwv2.HttpApi;
 
-  constructor(scope: Construct, id: string, props: SlackEventBusProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    private readonly props: SlackEventBusProps
+  ) {
     super(scope, id);
 
     this.pEventBus = new Events.EventBus(this, "EventBus", {
-      eventBusName: props.eventBusName || SlackEventBus.SLACK_EVENT_BUS_NAME,
+      eventBusName:
+        this.props.eventBusName || SlackEventBus.SLACK_EVENT_BUS_NAME,
     });
 
     const slackHandlerLambda = new SlackHandlerFunction(
@@ -49,8 +79,11 @@ export class SlackEventBus extends Construct {
           "Lambda that handles Slack Events, Interactions, Commands and oAuth",
         architecture: Architecture.ARM_64,
         environment: {
-          SLACK_SECRET_ARN: props.secret.secretArn,
+          SLACK_SECRET_ARN: this.props.secret.secretArn,
           SLACK_EVENT_BUS_NAME: this.pEventBus.eventBusName,
+          ...(this.props.singleApp
+            ? { SLACK_APP_ID: this.props.singleApp.appId }
+            : {}),
         },
       }
     );
@@ -64,16 +97,20 @@ export class SlackEventBus extends Construct {
       }
     );
 
-    props.secret.grantRead(this.pSlackHandlerLambdaAlias);
+    this.props.secret.grantRead(this.pSlackHandlerLambdaAlias);
     this.pEventBus.grantPutEventsTo(this.pSlackHandlerLambdaAlias);
 
-    this.httpApi = new apigwv2.HttpApi(this, "HttpApi", {
-      description: "Slack Handler Http Api",
-    });
+    this.pHttpApi = this.props.httpApi
+      ? this.props.httpApi
+      : new apigwv2.HttpApi(this, "HttpApi", {
+          description: "Slack Handler Http Api",
+        });
 
     // add for handling slack events route
-    this.httpApi.addRoutes({
-      path: `${SLACK_PATH_APP_PREFIX}${SLACK_PATH_EVENTS_API}`,
+    this.pHttpApi.addRoutes({
+      path: this.props.singleApp?.eventsApiPath
+        ? withSlash(this.props.singleApp.eventsApiPath)
+        : `${SLACK_PATH_APP_PREFIX}${SLACK_PATH_EVENTS_API}`,
       // ALL methods expect OPTIONS / ANY should be handled by our Lambda
       methods: [HttpMethod.POST],
       integration: new HttpLambdaIntegration(
@@ -84,7 +121,19 @@ export class SlackEventBus extends Construct {
   }
 
   slackEventsRequestUrl(appId?: string): string {
-    return `${this.httpApi.apiEndpoint}${SlackEventBus.appPath(
+    if (this.props.singleApp && this.props.singleApp.appId !== appId) {
+      throw new Error(
+        `you can only use with '${this.props.singleApp.appId}' appId because props.singleApp is configured`
+      );
+    }
+
+    if (this.props.singleApp) {
+      const { eventsApiPath } = this.props.singleApp;
+
+      return `${this.pHttpApi.apiEndpoint}${withSlash(eventsApiPath)}`;
+    }
+
+    return `${this.pHttpApi.apiEndpoint}${SlackEventBus.appPath(
       appId
     )}${SLACK_PATH_EVENTS_API}`;
   }

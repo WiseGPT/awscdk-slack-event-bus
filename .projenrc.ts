@@ -8,6 +8,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: "Yiğitcan UÇUM",
   authorAddress: "yengas07+wisegpt@gmail.com",
 
+  majorVersion: 1,
+
   name: "@wisegpt/awscdk-slack-event-bus",
   packageName: "@wisegpt/awscdk-slack-event-bus",
   npmAccess: NpmAccess.PUBLIC,

@@ -154,6 +154,8 @@ const slackEventBusProps: SlackEventBusProps = { ... }
 | --- | --- | --- |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.secret">secret</a></code> | <code>aws-cdk-lib.aws_secretsmanager.ISecret</code> | `secret` is a reference to the Secret parameter that stores the signing-secret and also if oAuth enabled; |
 | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.eventBusName">eventBusName</a></code> | <code>string</code> | `eventBusName` optional name to override the event bus name. |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.httpApi">httpApi</a></code> | <code>@aws-cdk/aws-apigatewayv2-alpha.HttpApi</code> | `httpApi` optional HTTP API to use, instead of Construct creating a new one. |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.singleApp">singleApp</a></code> | <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps">SlackEventBusSingleAppProps</a></code> | `singleApp` optionally configure to use a single application with fixed app id and path to use. |
 
 ---
 
@@ -180,6 +182,73 @@ public readonly eventBusName: string;
 - *Type:* string
 
 `eventBusName` optional name to override the event bus name.
+
+---
+
+##### `httpApi`<sup>Optional</sup> <a name="httpApi" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.httpApi"></a>
+
+```typescript
+public readonly httpApi: HttpApi;
+```
+
+- *Type:* @aws-cdk/aws-apigatewayv2-alpha.HttpApi
+
+`httpApi` optional HTTP API to use, instead of Construct creating a new one.
+
+---
+
+##### `singleApp`<sup>Optional</sup> <a name="singleApp" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusProps.property.singleApp"></a>
+
+```typescript
+public readonly singleApp: SlackEventBusSingleAppProps;
+```
+
+- *Type:* <a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps">SlackEventBusSingleAppProps</a>
+
+`singleApp` optionally configure to use a single application with fixed app id and path to use.
+
+---
+
+### SlackEventBusSingleAppProps <a name="SlackEventBusSingleAppProps" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps"></a>
+
+#### Initializer <a name="Initializer" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps.Initializer"></a>
+
+```typescript
+import { SlackEventBusSingleAppProps } from '@wisegpt/awscdk-slack-event-bus'
+
+const slackEventBusSingleAppProps: SlackEventBusSingleAppProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps.property.appId">appId</a></code> | <code>string</code> | `appId` to use for all request validating. |
+| <code><a href="#@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps.property.eventsApiPath">eventsApiPath</a></code> | <code>string</code> | `eventsApiPath` which would be used for the events path. |
+
+---
+
+##### `appId`<sup>Required</sup> <a name="appId" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps.property.appId"></a>
+
+```typescript
+public readonly appId: string;
+```
+
+- *Type:* string
+
+`appId` to use for all request validating.
+
+---
+
+##### `eventsApiPath`<sup>Required</sup> <a name="eventsApiPath" id="@wisegpt/awscdk-slack-event-bus.SlackEventBusSingleAppProps.property.eventsApiPath"></a>
+
+```typescript
+public readonly eventsApiPath: string;
+```
+
+- *Type:* string
+
+`eventsApiPath` which would be used for the events path.
 
 ---
 
