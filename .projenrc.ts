@@ -2,7 +2,7 @@ import { awscdk, javascript } from "projen";
 import { LambdaRuntime } from "projen/lib/awscdk";
 import { NpmAccess } from "projen/lib/javascript";
 
-const MIN_CDK_VERSION = "2.12.0";
+const MIN_CDK_VERSION = "2.69.0";
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: "Yiğitcan UÇUM",
